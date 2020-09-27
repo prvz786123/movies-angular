@@ -1,0 +1,20 @@
+<div class="row mt-5">
+  <div class="col-sm-12">
+    <div class="col-sm-4 offset-sm-4">
+      <mat-card style="padding-bottom: 50px;">
+        <div class="mb-4 text-center">
+          <h5 style="display: inline-block;">Admin Login</h5>
+        </div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Username</mat-label>
+          <input [(ngModel)]="username" matInput placeholder="Username">
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Password</mat-label>
+          <input [(ngModel)]="password" type="password" matInput placeholder="Password">
+        </mat-form-field>
+        <button (click)="onSubmit()" class="no-outline example-full-width" mat-raised-button>Login</button>
+      </mat-card>
+    </div>
+  </div>
+</div>

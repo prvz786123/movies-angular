@@ -4,5 +4,10 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  // origin:"https://movies-node-1.herokuapp.com"
+  origin:"http://localhost:3000",
+  isLoggedIn:localStorage.getItem('token')?true:false
+
 };

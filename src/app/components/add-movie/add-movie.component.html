@@ -1,0 +1,41 @@
+<h4>Add New Movie</h4>
+<form [formGroup]="newMovieForm" #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <mat-form-field class="example-full-width">
+    <mat-label>Movie Name</mat-label>
+    <input matInput formControlName="name" placeholder="Movie name">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Director</mat-label>
+    <input matInput formControlName="director" placeholder="Director name">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Popularity</mat-label>
+    <input type="number" min="0" max="100" matInput formControlName="popularity" placeholder="Popularity">
+    <mat-error>Please enter a value between 0 and 100</mat-error>
+  </mat-form-field>
+    <mat-form-field class="example-full-width">
+    <mat-label>IMDB Score</mat-label>
+    <input type="number" min="0" max="10" matInput formControlName="imdb_score" placeholder="IMDB Score">
+    <mat-error>Please enter a value between 0 and 10</mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let genre of genres" [selectable]="selectable"
+               [removable]="removable" (removed)="remove(genre)">
+        {{genre}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="New Genre..."
+             [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="addOnBlur"
+             (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <p style="color: red; font-size:.7em;" *ngIf="f.submitted && genres.length<1">This is required</p>
+  <div class="row">
+    <div class="col-sm-12">
+      <button type="submit" class="no-outline" mat-raised-button>Submit</button>
+    </div>
+  </div>
+</form>
