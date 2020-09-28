@@ -4,7 +4,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { RouterModule,Routes } from '@angular/router';
 
-import { MatButtonModule,MatCardModule, MatChipsModule, MatIconModule,MatDialogModule, MatInputModule } from '@angular/material';
+import { MatButtonModule,MatCardModule, MatChipsModule, MatIconModule,MatDialogModule, MatInputModule, MatSelectModule } from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -49,7 +49,8 @@ const appRoutes:Routes=[
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
   ],
   providers: [
     BackendService,

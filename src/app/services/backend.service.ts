@@ -23,6 +23,11 @@ export class BackendService {
     return this.http.post(url,newMovie)
   }
 
+  deleteMovie(id){
+    let url=`${this.env.origin}/movies/delete?id=${id}`
+    return this.http.delete(url)
+  }
+
   updateMovie(updatedMovie){
     let url=`${this.env.origin}/movies/update`;
     return this.http.patch(url,updatedMovie);
@@ -47,6 +52,11 @@ export class BackendService {
   addGenre(genre){
     let url=`${this.env.origin}/movies/add/genre`;
     return this.http.post(url,genre);
+  }
+
+  getSortedMovies(sortBy,startLimit,endLimit){
+    let url=`${this.env.origin}/movies/sort?sortBy=${sortBy}&startLimit=${startLimit}&endLimit=${endLimit}`
+    return this.http.get(url)
   }
 
 }

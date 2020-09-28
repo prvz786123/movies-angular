@@ -1,13 +1,14 @@
 <div class="mt-3">
   <div class="row">
     <div class="col-sm-8 pb-3">
-      <mat-chip-list>
-        <mat-chip [selected]="selectedGenre===genre" *ngFor="let genre of genreList" (click)="onGetMoviesByGenre(genre)" style="font-weight: 400;">{{genre | titlecase}}</mat-chip>
-        <button *ngIf="selectedGenre" (click)="removeGenreFilter()" class="no-outline" mat-icon-button color="primary">
+      <mat-chip-list [multiple]="true">
+        <mat-chip [selected]="selectedGenre.includes(genre)" *ngFor="let genre of genreList" (click)="onGetMoviesByGenre(genre)"
+          style="font-weight: 400; margin-top: 8px;">{{genre | titlecase}}</mat-chip>
+        <button *ngIf="selectedGenre.length" (click)="removeGenreFilter()" class="no-outline" mat-icon-button color="primary">
           <mat-icon>clear</mat-icon>
         </button>
       </mat-chip-list>
-      
+
     </div>
 
     <div class="col-sm-4 text-right">
@@ -25,9 +26,23 @@
   <div class="row">
     <!-- Search form -->
     <div class="col-sm-4">
-      <input [(ngModel)]="searchValue" class="form-control" style="display: inline-block; width: 80%;" type="text" placeholder="Search movie name" aria-label="Search">
+      <input [(ngModel)]="searchValue" class="form-control" style="display: inline-block; width: 80%;" type="text"
+        placeholder="Search movie name" aria-label="Search">
       <button (click)="onSearchClick()" class="no-outline" mat-icon-button color="primary">
         <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div class="col-sm-2">
+      <select [(ngModel)]="sortBy" (change)="onSortByChange()" class="form-control">
+        <option value="" hidden>Sort By</option>
+        <option *ngFor="let food of ['popularity','name','director']" [value]="food">
+          {{food | titlecase}}
+        </option>
+      </select>
+    </div>
+    <div *ngIf="searchValue || sortBy" class="col-sm-2">
+      <button (click)="onClear()" class="no-outline" mat-icon-button color="primary">
+        <mat-icon>clear</mat-icon>
       </button>
     </div>
   </div>
@@ -41,7 +56,7 @@
           <div style="display: inline-block; width: 60%;">
             Director - {{movie.director}}
             <br>
-            Popularity - {{movie.popularity}}% 
+            Popularity - {{movie.popularity}}%
             <br>
             <span>Rating - {{movie.imdb_score}}</span>
           </div>
@@ -50,13 +65,14 @@
               <button (click)="openDialog(movie)" class="no-outline" mat-icon-button color="primary">
                 <mat-icon>edit</mat-icon>
               </button><br>
-              <button class="no-outline" mat-icon-button color="warn">
+              <button (click)="onMovieDelete(movie)" class="no-outline" mat-icon-button color="warn">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
           </div>
           <br>
-          Genre - <span *ngFor="let genre of movie.genre" style="color: rgb(10, 117, 184);">{{genre | titlecase}}, </span>
+          Genre - <span *ngFor="let genre of movie.genre" style="color: rgb(10, 117, 184);">{{genre | titlecase}},
+          </span>
         </mat-card-content>
       </mat-card>
     </div>

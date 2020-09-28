@@ -38,11 +38,21 @@ export class MovieListingComponent implements OnInit {
   }
 
   loadMoreMovies() {
-    this.backendService.getMovies(this.movies.length, 15).subscribe((res: any) => {
-      if (res.success) {
-        this.movies = this.movies.concat(res.movies)
-      }
-    })
+    if(!this.sortBy){
+      this.backendService.getMovies(this.movies.length, 15).subscribe((res: any) => {
+        if (res.success) {
+          this.movies = this.movies.concat(res.movies)
+        }
+      })
+    }else{
+      this.backendService.getSortedMovies(this.sortBy,this.movies.length,15).subscribe((res:any)=>{
+        if(res.success){
+          this.movies=this.movies.concat(res.movies);
+        }else{
+          this.movies=[];
+        }
+      })
+    }
   }
 
   searchValue=""
@@ -71,11 +81,15 @@ export class MovieListingComponent implements OnInit {
     })
   }
 
-  genreList=['comedy','action','music', 'Adventure', 'Drama', 'Romance', 'War',]
-  selectedGenre=""
+  genreList=[];
+  selectedGenre=[]
   onGetMoviesByGenre(selecetedGenre){
-    this.selectedGenre=selecetedGenre;
-    if(selecetedGenre){
+    if(this.selectedGenre.includes(selecetedGenre)){
+      
+    }else{
+      this.selectedGenre.push(selecetedGenre);
+    }
+    if(this.selectedGenre.length==1){
       this.loadMoreFlag=false;
       let post_data={
         genre:[selecetedGenre]
@@ -87,11 +101,44 @@ export class MovieListingComponent implements OnInit {
           this.movies=[];
         }
       })
+    }else if(this.selectedGenre.length>1){
+      this.filterMoviesByMultipleGenre(selecetedGenre);      
+    }
+  }
+  filterMoviesByMultipleGenre(genre){
+    console.log(this.movies)
+    this.movies=this.movies.filter(ele=>{
+      let regex = new RegExp( ele.genre.join( "|" ), "i");
+      return regex.test(genre)
+    })
+    console.log(this.movies)
+  }
+  getSortedMovies(){
+    this.backendService.getSortedMovies(this.sortBy,this.movies.length,15).subscribe((res:any)=>{
+      if(res.success){
+        this.movies=res.movies;
+      }else{
+        this.movies=[];
+      }
+    })
+  }
+  sortBy="";
+  onSortByChange(){
+    if(this.sortBy){
+      this.movies=[];
+      this.getSortedMovies()
     }
   }
 
+
+  onClear(){
+    this.searchValue="";
+    this.sortBy="";
+    this.getMovies(0,15) 
+  }
+
   removeGenreFilter(){
-    this.selectedGenre="";
+    this.selectedGenre=[];
     this.getMovies(0,15);
   }
 
@@ -106,6 +153,21 @@ export class MovieListingComponent implements OnInit {
       data: {},
       width: '300px'
     });
+  }
+
+  onMovieDelete(movie){
+    if(confirm(movie.name+" will be delete")){
+      let id=movie._id
+    console.log(id)
+    this.backendService.deleteMovie(id).subscribe((res:any)=>{
+      if(res.success){
+        this.movies.splice(this.movies.indexOf(movie),1)
+        alert('Movie Deleted')
+      }else{
+        alert('Unable to delete')
+      }
+    })
+    }
   }
 
 
